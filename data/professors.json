@@ -1,0 +1,46 @@
+[
+  {
+    "national_id": "4061641212",
+    "first_name": "حسین",
+    "last_name": "مرادی",
+    "full_name": "حسین مرادی",
+    "professor_code": "mr_moradi",
+    "department": "زبان تخصصی",
+    "courses": [
+      "eng01"
+    ]
+  },
+  {
+    "national_id": "1231231231",
+    "first_name": "محمد",
+    "last_name": "رضایی",
+    "full_name": "محمد رضایی",
+    "professor_code": "mr_rezaei",
+    "department": "فیزیک 1",
+    "courses": [
+      "fizik1"
+    ]
+  },
+  {
+    "national_id": "4061641111",
+    "first_name": "سینا",
+    "last_name": "محبی",
+    "full_name": "سینا محبی",
+    "professor_code": "mr_mohebi",
+    "department": "ریاضی 1",
+    "courses": [
+      "math1"
+    ]
+  },
+  {
+    "national_id": "4061642222",
+    "first_name": "شیرممد",
+    "last_name": "علی پور",
+    "full_name": "شیرممد علی پور",
+    "professor_code": "mr_shir",
+    "department": "تفسیر قرآن",
+    "courses": [
+      "tafsir"
+    ]
+  }
+]

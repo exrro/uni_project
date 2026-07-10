@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+
+{% block title %}پنل استاد | {{ professor.first_name }} {{ professor.last_name }}{% endblock %}
+
+{% block content %}
+<header class="bg-white shadow-sm border-b border-gray-100">
+    <div class="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8 flex justify-between items-center">
+        <span class="text-xl font-bold text-gray-800">سامانه اساتید</span>
+        <div class="flex items-center gap-4">
+            <span class="text-sm bg-indigo-50 text-indigo-700 px-3 py-1 rounded-full font-medium">
+                دکتر {{ professor.first_name }} {{ professor.last_name }}
+            </span>
+            <a href="/" class="bg-gray-100 text-gray-600 px-4 py-2 rounded-xl text-sm font-semibold hover:bg-gray-200 transition">
+                خروج
+            </a>
+        </div>
+    </div>
+</header>
+
+<main class="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- لیست دروس -->
+        <div class="lg:col-span-1 space-y-4">
+            <h3 class="text-lg font-bold text-gray-800 mb-2">دروس شما در این ترم</h3>
+            {% for course in courses %}
+            <button onclick="loadStudents('{{ course.course_code }}', '{{ course.title }}')" class="w-full text-right bg-white p-5 rounded-2xl border border-gray-100 shadow-sm hover:border-blue-500 hover:shadow transition-all block">
+                <span class="block font-bold text-gray-900">{{ course.title }}</span>
+                <span class="block text-xs text-gray-400 mt-1">کد درس: {{ course.course_code }} | تعداد واحد: {{ course.units }}</span>
+            </button>
+            {% endfor %}
+        </div>
+
+        <!-- جزئیات و لیست دانشجویان -->
+        <div class="lg:col-span-2">
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 min-h-[400px]">
+                <div id="no-selection" class="flex flex-col items-center justify-center h-full py-20">
+                    <p class="text-gray-400 text-lg">جهت مشاهده لیست دانشجویان، یکی از دروس را انتخاب کنید.</p>
+                </div>
+
+                <div id="students-container" class="hidden">
+                    <h3 id="selected-course-title" class="text-xl font-bold text-gray-900 mb-6 border-b pb-4"></h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-right border-collapse">
+                            <thead>
+                                <tr class="bg-gray-50 text-gray-500 text-xs font-semibold">
+                                    <th class="p-3">دانشجو</th>
+                                    <th class="p-3">شماره دانشجویی</th>
+                                    <th class="p-3 text-center">نمره</th>
+                                    <th class="p-3 text-left">اقدامات</th>
+                                </tr>
+                            </thead>
+                            <tbody id="students-table-body" class="divide-y divide-gray-100 text-sm"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    let currentCourseCode = '';
+    let currentCourseTitle = '';
+
+    async function loadStudents(courseCode, courseTitle) {
+        currentCourseCode = courseCode;
+        currentCourseTitle = courseTitle;
+
+        document.getElementById('no-selection').classList.add('hidden');
+        document.getElementById('students-container').classList.remove('hidden');
+        document.getElementById('selected-course-title').innerText = `دانشجویان درس: ${courseTitle}`;
+
+        try {
+            const response = await fetch(`/selections/course/${courseCode}`);
+            const students = await response.json();
+            const tbody = document.getElementById('students-table-body');
+            tbody.innerHTML = '';
+
+            if (!students.length) {
+                tbody.innerHTML = '<tr><td colspan="4" class="p-8 text-center text-gray-400">دانشجویی یافت نشد.</td></tr>';
+                return;
+            }
+
+            students.forEach(student => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td class="p-3">${student.first_name} ${student.last_name}</td>
+                        <td class="p-3">${student.student_number}</td>
+                        <td class="p-3 text-center">
+                            <input type="number" id="grade-${student.student_number}" value="${student.grade || ''}" class="w-20 border rounded p-1 text-center">
+                        </td>
+                        <td class="p-3 text-left">
+                            <button onclick="saveGrade('${student.student_number}')" class="text-green-600 font-bold mx-2">ثبت</button>
+                            <button onclick="dropStudent('${student.student_number}')" class="text-red-600 font-bold">حذف</button>
+                        </td>
+                    </tr>
+                `;
+            });
+        } catch (e) { alert('خطا در دریافت لیست'); }
+    }
+
+    async function saveGrade(studentNumber) {
+        const grade = document.getElementById(`grade-${studentNumber}`).value;
+        const response = await fetch('/selections/grade', {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ student_number: studentNumber, course_code: currentCourseCode, grade: parseFloat(grade) })
+        });
+        if (response.ok) alert('نمره ثبت شد.');
+        else alert('خطا در ثبت نمره.');
+    }
+
+    async function dropStudent(studentNumber) {
+        if (!confirm('آیا مطمئن هستید؟')) return;
+        const response = await fetch(`/selections/${studentNumber}/${currentCourseCode}`, { method: 'DELETE' });
+        if (response.ok) {
+            alert('دانشجو حذف شد.');
+            loadStudents(currentCourseCode, currentCourseTitle);
+        } else alert('خطا در حذف.');
+    }
+</script>
+{% endblock %}

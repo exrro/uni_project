@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block title %}اطلاعات و نمرات | {{ student.first_name }} {{ student.last_name }}{% endblock %}
+
+{% block content %}
+<header class="bg-white shadow-sm border-b border-gray-100">
+    <div class="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8 flex justify-between items-center">
+        <span class="text-xl font-bold text-gray-800">مشخصات و نمرات دانشجو</span>
+        <div class="flex gap-3">
+            <a href="/student/dashboard/{{ student.student_number }}" class="bg-indigo-600 text-white px-5 py-2 rounded-xl text-sm font-semibold hover:bg-indigo-700 transition">
+                بازگشت به داشبورد انتخاب واحد
+            </a>
+            <a href="/" class="bg-gray-100 text-gray-600 px-4 py-2 rounded-xl text-sm font-semibold hover:bg-gray-200 transition">
+                خروج
+            </a>
+        </div>
+    </div>
+</header>
+
+<main class="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+        <!-- مشخصات فردی -->
+        <div class="lg:col-span-1">
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 space-y-4">
+                <h3 class="text-lg font-bold text-gray-900 border-b pb-3">اطلاعات فردی</h3>
+                <div class="space-y-3 text-sm">
+                    <div class="flex justify-between"><span class="text-gray-500">نام و نام خانوادگی:</span><span class="font-semibold text-gray-900">{{ student.first_name }} {{ student.last_name }}</span></div>
+                    <div class="flex justify-between"><span class="text-gray-500">شماره دانشجویی:</span><span class="font-semibold text-gray-900 font-mono-fa">{{ student.student_number }}</span></div>
+                    <div class="flex justify-between"><span class="text-gray-500">کد ملی:</span><span class="font-semibold text-gray-900 font-mono-fa">{{ student.national_id }}</span></div>
+                    <div class="flex justify-between"><span class="text-gray-500">رشته تحصیلی:</span><span class="font-semibold text-gray-900">{{ student.major }}</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- لیست دروس اخذ شده و نمرات -->
+        <div class="lg:col-span-2">
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+                <h3 class="text-lg font-bold text-gray-900 border-b pb-3 mb-6">دروس اخذ شده و نمرات</h3>
+
+                {% if enrolled_courses and enrolled_courses|length > 0 %}
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-right border-collapse">
+                            <thead>
+                                <tr class="bg-gray-50 text-gray-500 text-xs font-semibold">
+                                    <th class="p-3">نام درس</th>
+                                    <th class="p-3">استاد</th>
+                                    <th class="p-3 text-center">تعداد واحد</th>
+                                    <th class="p-3 text-center">نمره</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-100 text-sm">
+                                {% for course in enrolled_courses %}
+                                    <tr class="hover:bg-gray-50/50">
+                                        <td class="p-3 font-medium text-gray-900">{{ course.title }}</td>
+                                        <td class="p-3 text-gray-500">{{ course.professor_name }}</td>
+                                        <td class="p-3 text-center font-mono-fa">{{ course.units }}</td>
+                                        <td class="p-3 text-center">
+                                            {% if course.grade is not none %}
+                                                <span class="bg-emerald-50 text-emerald-700 px-2.5 py-1 rounded-lg font-bold font-mono-fa">{{ course.grade }}</span>
+                                            {% else %}
+                                                <span class="text-gray-400">ثبت نشده</span>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <p class="text-gray-400 text-center py-8">هنوز درسی اخذ نکرده‌اید.</p>
+                {% endif %}
+            </div>
+        </div>
+
+    </div>
+</main>
+{% endblock %}

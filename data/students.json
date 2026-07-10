@@ -1,0 +1,28 @@
+[
+  {
+    "national_id": "4061683827",
+    "first_name": "سید علی",
+    "last_name": "سهرابی",
+    "full_name": "سید علی سهرابی",
+    "student_number": "40411415045",
+    "major": "مهندسی کامپیوتر",
+    "selected_courses": [
+      "eng01",
+      "math1",
+      "tafsir",
+      "fizik1"
+    ]
+  },
+  {
+    "national_id": "4061643333",
+    "first_name": "محمد صالح",
+    "last_name": "کرمی",
+    "full_name": "محمد صالح کرمی",
+    "student_number": "40411415050",
+    "major": "مهندسی کامپیوتر",
+    "selected_courses": [
+      "eng01",
+      "tafsir"
+    ]
+  }
+]

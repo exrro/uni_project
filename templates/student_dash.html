@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block title %}پنل دانشجو | {{ student.first_name }} {{ student.last_name }}{% endblock %}
+
+{% block content %}
+<header class="bg-white shadow-sm border-b border-gray-100">
+    <div class="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8 flex justify-between items-center">
+        <span class="text-xl font-bold text-gray-800">سامانه انتخاب واحد دانشجویان</span>
+        <div class="flex items-center gap-4">
+            <span class="text-sm bg-indigo-50 text-indigo-700 px-3 py-1 rounded-full font-medium">
+                {{ student.first_name }} {{ student.last_name }} ({{ student.student_number }})
+            </span>
+            <a href="/student/info/{{ student.student_number }}" class="bg-indigo-600 text-white px-4 py-2 rounded-xl text-sm font-semibold hover:bg-indigo-700 transition">
+                مشاهده اطلاعات و نمرات
+            </a>
+            <a href="/" class="bg-gray-100 text-gray-600 px-4 py-2 rounded-xl text-sm font-semibold hover:bg-gray-200 transition">
+                خروج
+            </a>
+        </div>
+    </div>
+</header>
+
+<main class="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
+    <h2 class="text-xl font-bold text-gray-900 mb-6">لیست دروس ارائه شده و قابل اخذ</h2>
+
+    {% if available_courses and available_courses|length > 0 %}
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% for course in available_courses %}
+                <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm flex flex-col justify-between hover:shadow-md transition">
+                    <div>
+                        <h3 class="font-bold text-lg text-gray-900 mb-2">{{ course.title }}</h3>
+                        <div class="space-y-1 text-gray-500 mb-6">
+                            <div class="flex items-center gap-2">
+                                <span class="text-sm">استاد: {{ course.professor_name }}</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="text-sm">تعداد واحد: {{ course.units }}</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="text-xs font-mono-fa">کد درس: {{ course.course_code }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <button onclick="selectCourse('{{ student.student_number }}', '{{ course.course_code }}')"
+                            class="w-full bg-indigo-50 text-indigo-600 py-2.5 rounded-xl font-bold hover:bg-indigo-600 hover:text-white transition">
+                        اخذ درس
+                    </button>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="bg-white rounded-2xl border border-gray-100 p-12 text-center shadow-sm">
+            <p class="text-gray-500">تمامی دروس ارائه‌شده اخذ شده‌اند یا درسی ارائه نشده است.</p>
+        </div>
+    {% endif %}
+</main>
+{% endblock %}
+
+{% block scripts %}
+<script>
+async function selectCourse(studentNum, courseCode) {
+    try {
+        const response = await fetch(`/selections/${studentNum}/${courseCode}`, {
+            method: 'POST'
+        });
+        const data = await response.json();
+        if (response.ok) {
+            alert('درس با موفقیت اخذ شد.');
+            location.reload();
+        } else {
+            alert('خطا: ' + (data.detail || 'امکان اخذ درس وجود ندارد.'));
+        }
+    } catch (error) {
+        alert('خطا در ارتباط با سرور');
+    }
+}
+</script>
+{% endblock %}

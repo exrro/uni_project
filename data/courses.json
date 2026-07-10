@@ -1,0 +1,44 @@
+[
+  {
+    "course_code": "eng01",
+    "title": "زبان انگلیسی",
+    "units": 3,
+    "professor_code": "mr_moradi",
+    "students": [
+      "40411415045",
+      "40411415050"
+    ]
+  },
+  {
+    "course_code": "math1",
+    "title": "ریاضی 1",
+    "units": 3,
+    "professor_code": "mr_mohebi",
+    "students": [
+      "40411415045"
+    ]
+  },
+  {
+    "course_code": "fizik1",
+    "title": "فیزیک 1",
+    "units": 3,
+    "professor_code": "mr_rezaei",
+    "students": [
+      "40411415045"
+    ]
+  },
+  {
+    "course_code": "tafsir",
+    "title": "تفسیر قرآن",
+    "units": 2,
+    "professor_code": "mr_shir",
+    "students": [
+      "40411415045",
+      "40411415050"
+    ],
+    "grades": {
+      "40411415045": 12.5,
+      "40411415050": 16.0
+    }
+  }
+]
