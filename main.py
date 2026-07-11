@@ -43,7 +43,7 @@ async def login(
     role: str = Form(...)
 ):
     if role == "admin":
-        if username == "admin" and password == "admin":
+        if username == "@liflash11A" and password == "@liflash11A":
             return RedirectResponse(url="/docs", status_code=status.HTTP_303_SEE_OTHER)
         return HTMLResponse("کلمه عبور ادمین نادرست است.", status_code=400)
 
