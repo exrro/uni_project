@@ -138,5 +138,4 @@ Use Chrome DevTools:
 
 ---
 
-## License
-Add your license here (MIT / Apache-2.0 / etc).
+
