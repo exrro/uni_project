@@ -932,8 +932,6 @@ I enjoy building practical software systems and exploring the intersection of ba
 GitHub:
 
 https://github.com/exrro
-
-ss://Y2hhY2hhMjAtaWV0Zi1wb2x5MTMwNTo0bEhSOHJBZ3RmaEZKbHFuRGdWaHRCNDdfSnJBSDhONA@tr.decavo.ir:443#%F0%9F%87%B9%F0%9F%87%B7%20%7CTurkey%20Gaming%20%D8%AA%D8%A7%D9%86%D9%84
 ---
 
 <div align="center">
